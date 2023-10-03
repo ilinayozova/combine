@@ -585,21 +585,17 @@ List fast_rct_bcf(NumericMatrix X,
                   NumericMatrix X_tau,
                   double alpha_mu,
                   double beta_mu,
-                  double alpha_mu_rct,
-                  double beta_mu_rct,
                   double alpha_tau,
                   double beta_tau,
                   double alpha_tau_rct,
                   double beta_tau_rct,
                   double tau_mu,
-                  double tau_mu_rct,
                   double tau_tau,
                   double tau_tau_rct,
                   double nu,
                   double lambda,
                   int n_iter,
                   int n_tree_mu,
-                  int n_tree_mu_rct,
                   int n_tree_tau,
                   int n_tree_tau_rct,
                   int min_nodesize,
@@ -628,14 +624,12 @@ List fast_rct_bcf(NumericMatrix X,
   //For holding tree predictions at each iteration
   //Entry i,j holds prediction from tree j for observation i
   NumericMatrix tree_preds_mu(n, n_tree_mu);
-  NumericMatrix tree_preds_mu_rct(n, n_tree_mu_rct);
   NumericMatrix tree_preds_tau(n, n_tree_tau);
   NumericMatrix tree_preds_tau_rct(n, n_tree_tau_rct);
   
   //For holding overall predictions from each iteration
   //Entry i,j holds overall prediction from iteration j for observation i
   NumericMatrix preds_mat_mu(n, n_iter);
-  NumericMatrix preds_mat_mu_rct(n, n_iter);
   NumericMatrix preds_mat_tau(n, n_iter);
   NumericMatrix preds_mat_tau_rct(n, n_iter);
   
@@ -646,7 +640,6 @@ List fast_rct_bcf(NumericMatrix X,
   
   //Set up the forests used in each mu and tau part of the model
   Forest bart_forest_mu(n_tree_mu, 1, n);
-  Forest bart_forest_mu_rct(n_tree_mu_rct, 1, n);
   Forest bart_forest_tau(n_tree_tau, 1, n);
   Forest bart_forest_tau_rct(n_tree_tau_rct, 1, n);
   
@@ -723,151 +716,7 @@ List fast_rct_bcf(NumericMatrix X,
       
     }
     
-    //Loop for updating mu_rct trees (mu trees that apply a correction to the mu trees only for rct observations)
-    for(int tree_num = 0; tree_num < n_tree_mu_rct; tree_num++)
-    {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)
-      -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
-      
-      String choice = sample(choices, 1)[0];
-      
-      Tree proposal_tree = Tree(bart_forest_mu_rct.tree_vector[tree_num]);
-      
-      if(choice == "Grow")
-      {
-        proposal_tree.grow(X, p, min_nodesize);
-      }
-      
-      
-      if(choice == "Prune")
-      {
-        proposal_tree.prune();
-      }
-      
-      
-      if(choice == "Change")
-      {
-        proposal_tree.change(X, p);
-        proposal_tree.change_update(X);
-      }
-      
-      
-      if(choice == "Swap")
-      {
-        proposal_tree.swap();
-        proposal_tree.change_update(X);
-      }
-      
-      
-      if(!proposal_tree.has_empty_nodes(min_nodesize))
-      {
-        double lnew = proposal_tree.log_lik_tau(tau_mu_rct, 
-                                                tau,
-                                                alpha_mu_rct,
-                                                beta_mu_rct,
-                                                y_resid,
-                                                Z_rct,
-                                                mu_extra_pp_weights);
-        
-        double lold = bart_forest_mu_rct.tree_vector[tree_num].log_lik_tau(tau_mu_rct, 
-                                                                           tau,
-                                                                           alpha_mu_rct,
-                                                                           beta_mu_rct,
-                                                                           y_resid,
-                                                                           Z_rct,
-                                                                           mu_extra_pp_weights);
-        
-        double a = exp(lnew-lold);
-        if(a > R::runif(0, 1))
-        {
-          bart_forest_mu_rct.tree_vector[tree_num] = Tree(proposal_tree);
-        }
-      }
-      
-      bart_forest_mu_rct.tree_vector[tree_num].update_nodes_tau(tau, tau_mu_rct, y_resid, Z_rct, mu_extra_pp_weights);
-      
-      NumericVector tree_preds_from_iter_mu_rct = bart_forest_mu_rct.tree_vector[tree_num].get_predictions();
-      
-      for(int i=0; i<n; i++)
-      {
-        tree_preds_mu_rct(i, tree_num) = tree_preds_from_iter_mu_rct[i];
-      }
-      
-    }
-    
-    
-    //Loop for updating tau trees (tau trees that apply to everybody)
-    for(int tree_num = 0; tree_num < n_tree_tau; tree_num++)
-    {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)
-      -Z_treat*rowSumsWithoutColumn(tree_preds_tau, tree_num)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
-      
-      String choice = sample(choices, 1)[0];
-      
-      Tree proposal_tree = Tree(bart_forest_tau.tree_vector[tree_num]);
-      
-      if(choice == "Grow")
-      {
-        proposal_tree.grow(X_tau, p_tau, min_nodesize);
-      }
-      
-      
-      if(choice == "Prune")
-      {
-        proposal_tree.prune();
-      }
-      
-      
-      if(choice == "Change")
-      {
-        proposal_tree.change(X_tau, p_tau);
-        proposal_tree.change_update(X_tau);
-      }
-      
-      
-      if(choice == "Swap")
-      {
-        proposal_tree.swap();
-        proposal_tree.change_update(X_tau);
-      }
-      
-      
-      if(!proposal_tree.has_empty_nodes(min_nodesize))
-      {
-        double lnew = proposal_tree.log_lik_tau(tau_tau, 
-                                                tau,
-                                                alpha_tau,
-                                                beta_tau,
-                                                y_resid,
-                                                Z_treat,
-                                                tau_pp_weights);
-        
-        double lold = bart_forest_tau.tree_vector[tree_num].log_lik_tau(tau_tau, 
-                                                                        tau,
-                                                                        alpha_tau,
-                                                                        beta_tau,
-                                                                        y_resid,
-                                                                        Z_treat,
-                                                                        tau_pp_weights);
-        
-        double a = exp(lnew-lold);
-        if(a > R::runif(0, 1))
-        {
-          bart_forest_tau.tree_vector[tree_num] = Tree(proposal_tree);
-        }
-      }
-      
-      bart_forest_tau.tree_vector[tree_num].update_nodes_tau(tau, tau_tau, y_resid, Z_treat, tau_pp_weights);
-      
-      NumericVector tree_preds_from_iter_tau = bart_forest_tau.tree_vector[tree_num].get_predictions();
-      
-      for(int i=0; i<n; i++)
-      {
-        tree_preds_tau(i, tree_num) = tree_preds_from_iter_tau[i];
-      }
-      
-    }
-    
+  
     
     //Loop for updating tau rct trees (trees that apply correction to treatment effect estimates of rct observations)
     for(int tree_num = 0; tree_num < n_tree_tau_rct; tree_num++)
