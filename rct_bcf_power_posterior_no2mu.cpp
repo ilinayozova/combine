@@ -600,7 +600,6 @@ List fast_rct_bcf(NumericMatrix X,
                   int n_tree_tau_rct,
                   int min_nodesize,
                   NumericVector mu_pp_weights,
-                  NumericVector mu_extra_pp_weights,
                   NumericVector tau_pp_weights,
                   NumericVector tau_extra_pp_weights,
                   NumericVector precision_pp_weights)
