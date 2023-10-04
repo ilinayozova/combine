@@ -715,13 +715,83 @@ List fast_rct_bcf(NumericMatrix X,
       
     }
     
-  
+  //Loop for updating tau trees (tau trees that apply to everybody)
+    for(int tree_num = 0; tree_num < n_tree_tau; tree_num++)
+    {
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
+      -Z_treat*rowSumsWithoutColumn(tree_preds_tau, tree_num)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
+      
+      String choice = sample(choices, 1)[0];
+      
+      Tree proposal_tree = Tree(bart_forest_tau.tree_vector[tree_num]);
+      
+      if(choice == "Grow")
+      {
+        proposal_tree.grow(X_tau, p_tau, min_nodesize);
+      }
+      
+      
+      if(choice == "Prune")
+      {
+        proposal_tree.prune();
+      }
+      
+      
+      if(choice == "Change")
+      {
+        proposal_tree.change(X_tau, p_tau);
+        proposal_tree.change_update(X_tau);
+      }
+      
+      
+      if(choice == "Swap")
+      {
+        proposal_tree.swap();
+        proposal_tree.change_update(X_tau);
+      }
+      
+      
+      if(!proposal_tree.has_empty_nodes(min_nodesize))
+        {
+        double lnew = proposal_tree.log_lik_tau(tau_tau, 
+                                                tau,
+                                                alpha_tau,
+                                                beta_tau,
+                                                y_resid,
+                                                Z_treat,
+                                                tau_pp_weights);
+        
+        double lold = bart_forest_tau.tree_vector[tree_num].log_lik_tau(tau_tau, 
+                                                                        tau,
+                                                                        alpha_tau,
+                                                                        beta_tau,
+                                                                        y_resid,
+                                                                        Z_treat,
+                                                                        tau_pp_weights);
+        
+        double a = exp(lnew-lold);
+        if(a > R::runif(0, 1))
+        {
+          bart_forest_tau.tree_vector[tree_num] = Tree(proposal_tree);
+        }
+      }
+      
+      bart_forest_tau.tree_vector[tree_num].update_nodes_tau(tau, tau_tau, y_resid, Z_treat, tau_pp_weights);
+      
+      NumericVector tree_preds_from_iter_tau = bart_forest_tau.tree_vector[tree_num].get_predictions();
+      
+      for(int i=0; i<n; i++)
+      {
+        tree_preds_tau(i, tree_num) = tree_preds_from_iter_tau[i];
+      }
+      
+    }
+    
     
     //Loop for updating tau rct trees (trees that apply correction to treatment effect estimates of rct observations)
     for(int tree_num = 0; tree_num < n_tree_tau_rct; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)
-      -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, tree_num);
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1) -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, tree_num);
       
       String choice = sample(choices, 1)[0];
       
