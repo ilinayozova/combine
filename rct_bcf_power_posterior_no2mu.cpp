@@ -718,7 +718,7 @@ List fast_rct_bcf(NumericMatrix X,
   //Loop for updating tau trees (tau trees that apply to everybody)
     for(int tree_num = 0; tree_num < n_tree_tau; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, tree_num)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
       
       String choice = sample(choices, 1)[0];
