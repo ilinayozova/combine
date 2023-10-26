@@ -656,7 +656,7 @@ List fast_rct_bcf(NumericMatrix X,
     //Loop for updating mu trees (mu trees that apply to everybody)
     for(int tree_num = 0; tree_num < n_tree_mu; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
       
       String choice = sample(choices, 1)[0];
@@ -726,7 +726,7 @@ List fast_rct_bcf(NumericMatrix X,
     //Loop for updating mu_rct trees (mu trees that apply a correction to the mu trees only for rct observations)
     for(int tree_num = 0; tree_num < n_tree_mu_rct; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, tree_num)
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-rowSumsWithoutColumn(tree_preds_mu_rct, tree_num)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
       
       String choice = sample(choices, 1)[0];
@@ -784,7 +784,7 @@ List fast_rct_bcf(NumericMatrix X,
         }
       }
       
-      bart_forest_mu_rct.tree_vector[tree_num].update_nodes_tau(tau, tau_mu_rct, y_resid, Z_rct, mu_extra_pp_weights);
+      bart_forest_mu_rct.tree_vector[tree_num].update_nodes_tau(tau, tau_mu_rct, y_resid, Z_treat, mu_extra_pp_weights);
       
       NumericVector tree_preds_from_iter_mu_rct = bart_forest_mu_rct.tree_vector[tree_num].get_predictions();
       
@@ -799,7 +799,7 @@ List fast_rct_bcf(NumericMatrix X,
     //Loop for updating tau trees (tau trees that apply to everybody)
     for(int tree_num = 0; tree_num < n_tree_tau; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, tree_num)-Z_treat*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
       
       String choice = sample(choices, 1)[0];
@@ -872,7 +872,7 @@ List fast_rct_bcf(NumericMatrix X,
     //Loop for updating tau rct trees (trees that apply correction to treatment effect estimates of rct observations)
     for(int tree_num = 0; tree_num < n_tree_tau_rct; tree_num++)
     {
-      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
+      NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, -1)-rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*rowSumsWithoutColumn(tree_preds_tau_rct, tree_num);
       
       String choice = sample(choices, 1)[0];
@@ -959,7 +959,7 @@ List fast_rct_bcf(NumericMatrix X,
     }
     
     //Update the precision parameter
-    tau=sample_tau(n, nu, y_scaled, iter_preds_mu + Z_rct*iter_preds_mu_rct + Z_treat*iter_preds_tau + Z_treat*iter_preds_tau_rct, lambda, precision_pp_weights);
+    tau=sample_tau(n, nu, y_scaled, iter_preds_mu + iter_preds_mu_rct + Z_treat*iter_preds_tau + Z_treat*iter_preds_tau_rct, lambda, precision_pp_weights);
     
     taus[iter] = tau;
   }
