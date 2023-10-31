@@ -959,7 +959,7 @@ List fast_rct_bcf(NumericMatrix X,
     }
     
     //Update the precision parameter
-    tau=sample_tau(n, nu, y_scaled, iter_preds_mu + Z_rct*iter_preds_mu_rct + Z_treat*iter_preds_tau + Z_treat**iter_preds_tau_rct, lambda, precision_pp_weights);
+    tau=sample_tau(n, nu, y_scaled, iter_preds_mu + Z_rct*iter_preds_mu_rct + Z_treat*iter_preds_tau + Z_treat*iter_preds_tau_rct, lambda, precision_pp_weights);
     
     taus[iter] = tau;
   }
