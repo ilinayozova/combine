@@ -45,9 +45,7 @@ class Node {
     
     NumericVector node_pp_weights = pp_weights[observations];
     double nj = sum(node_pp_weights);
-    Rcpp::Rcout << "sum node_pp_weights " << nj  << "\r";
     NumericVector node_resid = y_resid[observations];
-    Rcpp::Rcout << "node_resid mu " << node_resid  << "\r";
     double Sj = sum(node_pp_weights*node_resid);
     mu = R::rnorm((tau * Sj) / (nj * tau + tau_mu), sqrt(1 / (nj * tau + tau_mu)));
   }
@@ -473,7 +471,9 @@ class Tree {
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
         double nj = sum(node_pp_weights);
         NumericVector node_resid = y_resid[node_vector[i].observations];
+        Rcpp::Rcout << "node_resid tau " << node_resid  << "\r";
         NumericVector zy = Z*y_resid;
+        Rcpp::Rcout << " Z*y_resid " << zy  << "\r";
         NumericVector node_zy_resid= zy[node_vector[i].observations];
         NumericVector node_z = Z[node_vector[i].observations];
         double nz = sum(node_pp_weights*node_z);
