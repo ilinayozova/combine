@@ -615,18 +615,19 @@ List fast_rct_bcf(NumericMatrix X,
   
   //normalise y before starting
   double y_mean = mean(y);
-  Rcout << "y mean " << y_mean;
   double y_sd = sd(y);
-  Rprintf("the value of y_sd is", y_sd);
   NumericVector y_scaled = (y-y_mean)/y_sd;
   
   //get number of variables p, and rows n
   //n observations
   int n = y_scaled.size();
+   Rcout << "n " << n << "\r";
   //columns in the control matrix of covariates
   int p = X.ncol();
+   Rcout << "columns in the control matrix of covariates " << p  << "\r";
   //columns in the moderating matrix of covariates
   int p_tau = X_tau.ncol();
+   Rcout << "columns in the moderating matrix of covariates " << p_tau << "\r";
   
   //For holding tree predictions at each iteration
   //Entry i,j holds prediction from tree j for observation i
@@ -661,7 +662,8 @@ List fast_rct_bcf(NumericMatrix X,
     {
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
-      
+
+       
       String choice = sample(choices, 1)[0];
       
       Tree proposal_tree = Tree(bart_forest_mu.tree_vector[tree_num]);
