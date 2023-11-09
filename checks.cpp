@@ -617,7 +617,7 @@ List fast_rct_bcf(NumericMatrix X,
   double y_mean = mean(y);
   Rcout << "y mean " << y_mean;
   double y_sd = sd(y);
-  Rcout << "y_sd" << y_sd;
+  Rprintf("the value of y_sd is", y_sd);
   NumericVector y_scaled = (y-y_mean)/y_sd;
   
   //get number of variables p, and rows n
