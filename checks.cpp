@@ -469,7 +469,6 @@ class Tree {
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
-        Rcout << "node weights " << node_pp_weights ;
         double nj = sum(node_pp_weights);
         NumericVector node_resid = y_resid[node_vector[i].observations];
         NumericVector zy = Z*y_resid;
@@ -616,9 +615,9 @@ List fast_rct_bcf(NumericMatrix X,
   
   //normalise y before starting
   double y_mean = mean(y);
-  Rcpp::Rcout << "y mean " << y_mean;
+  Rcout << "y mean " << y_mean;
   double y_sd = sd(y);
-  Rcpp::Rcout << "y_sd" << y_sd;
+  Rcout << "y_sd" << y_sd;
   NumericVector y_scaled = (y-y_mean)/y_sd;
   
   //get number of variables p, and rows n
