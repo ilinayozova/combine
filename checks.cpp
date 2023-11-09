@@ -469,7 +469,7 @@ class Tree {
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
-                     Rcpp::Rcout << "node weights " << node_pp_weights ;
+        Rcout << "node weights " << node_pp_weights ;
         double nj = sum(node_pp_weights);
         NumericVector node_resid = y_resid[node_vector[i].observations];
         NumericVector zy = Z*y_resid;
