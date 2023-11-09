@@ -621,13 +621,13 @@ List fast_rct_bcf(NumericMatrix X,
   //get number of variables p, and rows n
   //n observations
   int n = y_scaled.size();
-   Rcout << "n " << n;
+  // Rcout << "n " << n;
   //columns in the control matrix of covariates
   int p = X.ncol();
-   Rcout << "columns in the control matrix of covariates " << p ;
+  // Rcout << "columns in the control matrix of covariates " << p ;
   //columns in the moderating matrix of covariates
   int p_tau = X_tau.ncol();
-   Rcout << "columns in the moderating matrix of covariates " << p_tau ;
+  // Rcout << "columns in the moderating matrix of covariates " << p_tau ;
   
   //For holding tree predictions at each iteration
   //Entry i,j holds prediction from tree j for observation i
@@ -663,6 +663,7 @@ List fast_rct_bcf(NumericMatrix X,
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
 
+        Rcout << "y_resid " << y_resid;
        
       String choice = sample(choices, 1)[0];
       
