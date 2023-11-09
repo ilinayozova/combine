@@ -615,8 +615,9 @@ List fast_rct_bcf(NumericMatrix X,
   
   //normalise y before starting
   double y_mean = mean(y);
-  Rcpp::Rcout << "y mean " << y_mean  << "\r";
+  Rcpp::Rcout << "y mean " << y_mean;
   double y_sd = sd(y);
+  Rcpp::Rcout << "y_sd" << y_sd;
   NumericVector y_scaled = (y-y_mean)/y_sd;
   
   //get number of variables p, and rows n
