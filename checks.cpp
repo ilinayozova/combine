@@ -944,8 +944,8 @@ List fast_rct_bcf(NumericMatrix X,
       
     }
     
-    Rcpp::Rcout << "Total of " << iter+1 << " of " << n_iter << " iterations completed! " << "(" << (float)(iter+1)/(float)n_iter*100 << "%)                         " << "\r";
-    Rcpp::Rcout.flush();
+    Rcpp::Rcout << "Total off " << iter+1 << " of " << n_iter << " iterations completed! " << "(" << (float)(iter+1)/(float)n_iter*100 << "%)                         " << "\r";
+    //Rcpp::Rcout.flush();
     
     //Get the overall predictions from the iteration by adding contributions from all trees
     NumericVector iter_preds_mu = rowSumsWithoutColumn(tree_preds_mu, -1);
