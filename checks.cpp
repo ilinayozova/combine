@@ -660,6 +660,10 @@ List fast_rct_bcf(NumericMatrix X,
     //Loop for updating mu trees (mu trees that apply to everybody)
     for(int tree_num = 0; tree_num < n_tree_mu; tree_num++)
     {
+        Rcout << "tree_preds_mu " << tree_preds_mu;
+        Rcout << "tree_preds_mu_rct " << tree_preds_mu_rct;
+        Rcout << "tree_preds_tau " << tree_preds_tau;
+        Rcout << "tree_preds_tau_rct " << tree_preds_tau_rct;
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
 
