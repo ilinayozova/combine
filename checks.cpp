@@ -485,29 +485,49 @@ class Tree {
     {
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
+         Rcout << "node_vector.size() " << node_vector.size();
+         Rcout << "tau_tau " << tau_tau;
+          Rcout << "tau " << tau;
+          Rcout << "alpha_tau " << alpha_tau;
+          Rcout << "beta_tau " << beta_tau;
+          Rcout << "y_resid " << y_resid;
+          Rcout << "Z" << Z;
+          Rcout << "pp_weights " << pp_weights;
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
+                  Rcout << "node_pp_weights " << node_pp_weights;
         double nj = sum(node_pp_weights);
+                  Rcout << "nj " << nj;
         NumericVector node_resid = y_resid[node_vector[i].observations];
+                  Rcout << "node_resid " << node_resid;
         NumericVector zy = Z*y_resid;
+                  Rcout << "zy " << zy;
         NumericVector node_zy_resid= zy[node_vector[i].observations];
+                  Rcout << "node_zy_resid " << node_zy_resid;
         NumericVector node_z = Z[node_vector[i].observations];
+                  Rcout << "node_z " << node_z;
         double nz = sum(node_pp_weights*node_z);
+                  Rcout << "nz " << nz;
         double sum_Rji2 = sum(node_pp_weights*(node_resid*node_resid));
+                  Rcout << "sum_Rji2 " << sum_Rji2;
         
         double eq1 = (nj/2.0)*log(tau) + (1.0/2.0)*log(tau_tau/(tau_tau + nz*tau)) - (tau/2.0)*(sum_Rji2 - (tau*(sum(node_pp_weights*node_zy_resid))*(sum(node_pp_weights*node_zy_resid)))/(tau_tau + nz*tau));
+         Rcout << "eq1 " << eq1;
         double eq4p1 = log(1.0-alpha_tau*pow(1+floor(log2(i + 1)), (-1*beta_tau)));
-        
+         Rcout << "eq4p1 " << eq4p1;
         log_lik += eq1 + eq4p1;
+         Rcout << "log_lik " << log_lik;
       }
       else if(node_vector[i].in_use & !node_vector[i].is_terminal)
       {
         double eq4p2 = log(alpha_tau)-beta_tau*log(1+floor(log2(i + 1)));
-        
+         Rcout << "eq4p2 " << eq4p2;
         log_lik += eq4p2;
+         Rcout << "log_lik " << log_lik;
       }
     }
-    
+     Rcout << "log_lik final " << log_lik;
     return log_lik;
+    
   }
   
   
