@@ -57,14 +57,27 @@ class Node {
                   NumericVector y_resid,
                   NumericVector Z,
                   NumericVector pp_weights) {
-    
+      Rcout << "tau " << tau;
+      Rcout << "tau_tau " << tau_tau;
+      Rcout << "y_resid " << y_resid;
+      Rcout << "Z " << Z;
+      Rcout << "pp_weights " << pp_weights;
+
+     
     NumericVector node_pp_weights = pp_weights[observations];
+     Rcout << "node_pp_weights " << node_pp_weights;
     NumericVector zy = Z*y_resid;
+      Rcout << "zy " << zy;
     NumericVector node_zy_resid = zy[observations];
+      Rcout << "node_zy_resid " << node_zy_resid;
     NumericVector node_z = Z[observations];
+     Rcout << "node_z " << node_z;
     double nz = sum(node_pp_weights*node_z);
+      Rcout << "nz " << nz;
     double Sj = sum(node_pp_weights*node_zy_resid);
+      Rcout << "Sj " << Sj;
     mu = R::rnorm((tau * Sj) / (nz * tau + tau_tau), sqrt(1 / (nz * tau + tau_tau)));
+      Rcout << "mu " << mu;
   }
   
   
