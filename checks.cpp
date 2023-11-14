@@ -430,22 +430,39 @@ class Tree {
     {
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
+         Rcout << "node_vector.size() " << node_vector.size();
+         Rcout << "tau_mu " << tau_mu;
+          Rcout << "tau " << tau;
+          Rcout << "alpha " << alpha;
+          Rcout << "beta " << beta;
+          Rcout << "y_resid " << y_resid;
+          Rcout << "pp_weights " << pp_weights;
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
+         Rcout << "node_pp_weights " << node_pp_weights;
         double nj = sum(node_pp_weights);
+         Rcout << "nj " << nj;
         NumericVector node_resid = y_resid[node_vector[i].observations];
+         Rcout << "node_resid " << node_resid;
         double sum_Rji2 = sum(node_pp_weights*(node_resid*node_resid));
+         Rcout << "sum_Rji2 " << sum_Rji2;
         double nj_Rj_bar = sum(node_pp_weights*node_resid);
+         Rcout << "nj_Rj_bar " << nj_Rj_bar;
         
         double eq1 = (nj/2.0)*log(tau) + (1.0/2.0)*log(tau_mu/(tau_mu + nj*tau)) - (tau/2.0)*(sum_Rji2 - (tau*(nj_Rj_bar)*(nj_Rj_bar))/(tau_mu + nj*tau));
-        double eq4p1 = log(1.0-alpha*pow(1+floor(log2(i + 1)), (-1*beta)));
-        
+         Rcout << "eq1 " << eq1;
+         double eq4p1 = log(1.0-alpha*pow(1+floor(log2(i + 1)), (-1*beta)));
+         Rcout << "eq4p1 " << eq4p1;
         log_lik += eq1 + eq4p1;
+          Rcout << "log_lik " << log_lik;
       }
       else if(node_vector[i].in_use & !node_vector[i].is_terminal)
       {
         double eq4p2 = log(alpha)-beta*log(1+floor(log2(i + 1)));
-        
+                  Rcout << "eq4p2 " << eq4p2;
+
         log_lik += eq4p2;
+                   Rcout << "log_lik " << log_lik;
+
       }
     }
     
