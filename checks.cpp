@@ -686,7 +686,7 @@ List fast_rct_bcf(NumericMatrix X,
         Rcout << "rowSumsWithoutColumn(tree_preds_mu, tree_num)" << rowSumsWithoutColumn(tree_preds_mu, tree_num); 
         Rcout << "rowSumsWithoutColumn(tree_preds_mu_rct, -1)" << rowSumsWithoutColumn(tree_preds_mu_rct, -1);
        Rcout << "rowSumsWithoutColumn(tree_preds_tau, -1)" << rowSumsWithoutColumn(tree_preds_tau, -1);
-       Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rrowSumsWithoutColumn(tree_preds_tau_rct, -1);
+       Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rowSumsWithoutColumn(tree_preds_tau_rct, -1);
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
 
