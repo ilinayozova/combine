@@ -442,9 +442,8 @@ class Tree {
     
     for(int i = 0; i < node_vector.size(); i++)
     {
-      if(node_vector[i].in_use & node_vector[i].is_terminal)
-      {
-          Rcout << "log_lik                    "  << "\n";
+
+       Rcout << "log_lik                    "  << "\n";
          Rcout << "node_vector.size() " << node_vector.size() << "\n";
          Rcout << "tau_mu " << tau_mu << "\n";
           Rcout << "tau " << tau << "\n";
@@ -452,6 +451,9 @@ class Tree {
           Rcout << "beta " << beta << "\n";
           Rcout << "y_resid " << y_resid << "\n";
           Rcout << "pp_weights " << pp_weights << "\n";
+      if(node_vector[i].in_use & node_vector[i].is_terminal)
+      {
+          
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
          Rcout << "node_pp_weights " << node_pp_weights << "\n";
         double nj = sum(node_pp_weights);
@@ -498,9 +500,7 @@ class Tree {
     
     for(int i = 0; i < node_vector.size(); i++)
     {
-      if(node_vector[i].in_use & node_vector[i].is_terminal)
-      {
-         Rcout << "log_lik_tau                       " << "\n";
+       Rcout << "log_lik_tau                       " << "\n";
          Rcout << "node_vector.size() " << node_vector.size() << "\n";
          Rcout << "tau_tau " << tau_tau << "\n";
           Rcout << "tau " << tau << "\n";
@@ -509,6 +509,9 @@ class Tree {
           Rcout << "y_resid " << y_resid << "\n";
           Rcout << "Z" << Z << "\n";
           Rcout << "pp_weights " << pp_weights << "\n";
+      if(node_vector[i].in_use & node_vector[i].is_terminal)
+      {
+         
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
                   Rcout << "node_pp_weights " << node_pp_weights << "\n";
         double nj = sum(node_pp_weights);
