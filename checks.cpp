@@ -720,10 +720,10 @@ List fast_rct_bcf(NumericMatrix X,
         Rcout << "tree_preds_tau_rct " << tree_preds_tau_rct << "\n";
         //Rcout << "Z_treat " << Z_treat;
         //Rcout << "Z_rct " << Z_rct;
-        Rcout << "rowSumsWithoutColumn(tree_preds_mu, tree_num)" << rowSumsWithoutColumn(tree_preds_mu, tree_num) << "\n";
-        Rcout << "rowSumsWithoutColumn(tree_preds_mu_rct, -1)" << rowSumsWithoutColumn(tree_preds_mu_rct, -1) << "\n";
-       Rcout << "rowSumsWithoutColumn(tree_preds_tau, -1)" << rowSumsWithoutColumn(tree_preds_tau, -1) << "\n";
-       Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rowSumsWithoutColumn(tree_preds_tau_rct, -1) << "\n";
+        //Rcout << "rowSumsWithoutColumn(tree_preds_mu, tree_num)" << rowSumsWithoutColumn(tree_preds_mu, tree_num) << "\n";
+        //Rcout << "rowSumsWithoutColumn(tree_preds_mu_rct, -1)" << rowSumsWithoutColumn(tree_preds_mu_rct, -1) << "\n";
+        //Rcout << "rowSumsWithoutColumn(tree_preds_tau, -1)" << rowSumsWithoutColumn(tree_preds_tau, -1) << "\n";
+        //Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rowSumsWithoutColumn(tree_preds_tau_rct, -1) << "\n";
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
 
