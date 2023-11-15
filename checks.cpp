@@ -733,6 +733,7 @@ List fast_rct_bcf(NumericMatrix X,
         Rcout << "y_resid " << y_resid << "\n";
        
       String choice = sample(choices, 1)[0];
+        Rcout << "choice " << choice << "\n";
       
       Tree proposal_tree = Tree(bart_forest_mu.tree_vector[tree_num]);
       
