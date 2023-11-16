@@ -733,7 +733,6 @@ List fast_rct_bcf(NumericMatrix X,
         Rcout << "y_resid " << y_resid << "\n";
        
       String choice = sample(choices, 1)[0];
-        Rcout << "choice " << choice << "\n";
       
       Tree proposal_tree = Tree(bart_forest_mu.tree_vector[tree_num]);
       
@@ -1010,7 +1009,7 @@ List fast_rct_bcf(NumericMatrix X,
       
       for(int i=0; i<n; i++)
       {
-        tree_preds_tau_rct(i, tree_num) = tree_preds_from_iter_tau_rct[i];
+        tree_preds_tau_rct(i, tree_num) = 100000;
       }
       
     }
