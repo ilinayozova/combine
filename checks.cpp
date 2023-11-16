@@ -1006,12 +1006,19 @@ List fast_rct_bcf(NumericMatrix X,
       bart_forest_tau_rct.tree_vector[tree_num].update_nodes_tau(tau, tau_tau_rct, y_resid, Z_treat*Z_rct, tau_extra_pp_weights);
       
       NumericVector tree_preds_from_iter_tau_rct = bart_forest_tau_rct.tree_vector[tree_num].get_predictions();
-      
+       
       for(int i=0; i<n; i++)
+      {
+        tree_preds_tau_rct(i, tree_num) = tree_preds_from_iter_tau_rct[i];
+      }
+
+          if (iter = 1)
+     {
+     for(int i=0; i<n; i++)
       {
         tree_preds_tau_rct(i, tree_num) = 100000;
       }
-      
+     }
     }
     
     //Rcpp::Rcout << "Total off " << iter+1 << " of " << n_iter << " iterations completed! " << "(" << (float)(iter+1)/(float)n_iter*100 << "%)                         " << "\n";
@@ -1022,7 +1029,7 @@ List fast_rct_bcf(NumericMatrix X,
     NumericVector iter_preds_mu_rct = rowSumsWithoutColumn(tree_preds_mu_rct, -1);
     NumericVector iter_preds_tau = rowSumsWithoutColumn(tree_preds_tau, -1);
     NumericVector iter_preds_tau_rct = rowSumsWithoutColumn(tree_preds_tau_rct, -1);
-    
+  
     for(int i=0; i<n; i++)
     {
       preds_mat_mu(i, iter) = iter_preds_mu[i];
