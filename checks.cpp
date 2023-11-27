@@ -57,28 +57,28 @@ class Node {
                   NumericVector y_resid,
                   NumericVector Z,
                   NumericVector pp_weights) {
-     Rcout << "Method for updating mu in a treatment effect tree" << "\n";
-      Rcout << "tau " << tau  << "\n";
-      Rcout << "tau_tau " << tau_tau << "\n";
-      Rcout << "y_resid " << y_resid << "\n";
-      Rcout << "Z " << Z << "\n";
-      Rcout << "pp_weights " << pp_weights << "\n";
+     //Rcout << "Method for updating mu in a treatment effect tree" << "\n";
+      //Rcout << "tau " << tau  << "\n";
+      //Rcout << "tau_tau " << tau_tau << "\n";
+      //Rcout << "y_resid " << y_resid << "\n";
+      //Rcout << "Z " << Z << "\n";
+      //Rcout << "pp_weights " << pp_weights << "\n";
 
      
     NumericVector node_pp_weights = pp_weights[observations];
-     Rcout << "node_pp_weights " << node_pp_weights << "\n";
+     //Rcout << "node_pp_weights " << node_pp_weights << "\n";
     NumericVector zy = Z*y_resid;
-      Rcout << "zy " << zy << "\n";
+      //Rcout << "zy " << zy << "\n";
     NumericVector node_zy_resid = zy[observations];
-      Rcout << "node_zy_resid " << node_zy_resid << "\n";
+      //Rcout << "node_zy_resid " << node_zy_resid << "\n";
     NumericVector node_z = Z[observations];
-     Rcout << "node_z " << node_z << "\n";
+     //Rcout << "node_z " << node_z << "\n";
     double nz = sum(node_pp_weights*node_z);
-      Rcout << "nz " << nz << "\n";
+      //Rcout << "nz " << nz << "\n";
     double Sj = sum(node_pp_weights*node_zy_resid);
-      Rcout << "Sj " << Sj << "\n";
+      //Rcout << "Sj " << Sj << "\n";
     mu = R::rnorm((tau * Sj) / (nz * tau + tau_tau), sqrt(1 / (nz * tau + tau_tau)));
-      Rcout << "mu " << mu << "\n";
+      //Rcout << "mu " << mu << "\n";
   }
   
   
@@ -443,42 +443,42 @@ class Tree {
     for(int i = 0; i < node_vector.size(); i++)
     {
 
-       Rcout << "log_lik                    "  << "\n";
-         Rcout << "node_vector.size() " << node_vector.size() << "\n";
-         Rcout << "tau_mu " << tau_mu << "\n";
-          Rcout << "tau " << tau << "\n";
-          Rcout << "alpha " << alpha << "\n";
-          Rcout << "beta " << beta << "\n";
-          Rcout << "y_resid " << y_resid << "\n";
-          Rcout << "pp_weights " << pp_weights << "\n";
+       //Rcout << "log_lik                    "  << "\n";
+         //Rcout << "node_vector.size() " << node_vector.size() << "\n";
+         //Rcout << "tau_mu " << tau_mu << "\n";
+          //Rcout << "tau " << tau << "\n";
+          //Rcout << "alpha " << alpha << "\n";
+          //Rcout << "beta " << beta << "\n";
+          //Rcout << "y_resid " << y_resid << "\n";
+          //Rcout << "pp_weights " << pp_weights << "\n";
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
           
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
-         Rcout << "node_pp_weights " << node_pp_weights << "\n";
+         //Rcout << "node_pp_weights " << node_pp_weights << "\n";
         double nj = sum(node_pp_weights);
-         Rcout << "nj " << nj << "\n";
+         //Rcout << "nj " << nj << "\n";
         NumericVector node_resid = y_resid[node_vector[i].observations];
-         Rcout << "node_resid " << node_resid << "\n";
+         //Rcout << "node_resid " << node_resid << "\n";
         double sum_Rji2 = sum(node_pp_weights*(node_resid*node_resid));
-         Rcout << "sum_Rji2 " << sum_Rji2 << "\n";
+         //Rcout << "sum_Rji2 " << sum_Rji2 << "\n";
         double nj_Rj_bar = sum(node_pp_weights*node_resid);
-         Rcout << "nj_Rj_bar " << nj_Rj_bar << "\n";
+         //Rcout << "nj_Rj_bar " << nj_Rj_bar << "\n";
         
         double eq1 = (nj/2.0)*log(tau) + (1.0/2.0)*log(tau_mu/(tau_mu + nj*tau)) - (tau/2.0)*(sum_Rji2 - (tau*(nj_Rj_bar)*(nj_Rj_bar))/(tau_mu + nj*tau));
-         Rcout << "eq1 " << eq1 << "\n";
+         //Rcout << "eq1 " << eq1 << "\n";
          double eq4p1 = log(1.0-alpha*pow(1+floor(log2(i + 1)), (-1*beta)));
-         Rcout << "eq4p1 " << eq4p1 << "\n";
+         //Rcout << "eq4p1 " << eq4p1 << "\n";
         log_lik += eq1 + eq4p1;
-          Rcout << "log_lik " << log_lik << "\n";
+          //Rcout << "log_lik " << log_lik << "\n";
       }
       else if(node_vector[i].in_use & !node_vector[i].is_terminal)
       {
         double eq4p2 = log(alpha)-beta*log(1+floor(log2(i + 1)));
-                  Rcout << "eq4p2 " << eq4p2 << "\n";
+                  //Rcout << "eq4p2 " << eq4p2 << "\n";
 
         log_lik += eq4p2;
-                   Rcout << "log_lik " << log_lik << "\n";
+                   //Rcout << "log_lik " << log_lik << "\n";
 
       }
     }
@@ -500,51 +500,51 @@ class Tree {
     
     for(int i = 0; i < node_vector.size(); i++)
     {
-       Rcout << "log_lik_tau                       " << "\n";
-         Rcout << "node_vector.size() " << node_vector.size() << "\n";
-         Rcout << "tau_tau " << tau_tau << "\n";
-          Rcout << "tau " << tau << "\n";
-          Rcout << "alpha_tau " << alpha_tau << "\n";
-          Rcout << "beta_tau " << beta_tau << "\n";
-          Rcout << "y_resid " << y_resid << "\n";
-          Rcout << "Z" << Z << "\n";
-          Rcout << "pp_weights " << pp_weights << "\n";
+       //Rcout << "log_lik_tau                       " << "\n";
+         //Rcout << "node_vector.size() " << node_vector.size() << "\n";
+         //Rcout << "tau_tau " << tau_tau << "\n";
+          //Rcout << "tau " << tau << "\n";
+          //Rcout << "alpha_tau " << alpha_tau << "\n";
+          //Rcout << "beta_tau " << beta_tau << "\n";
+          //Rcout << "y_resid " << y_resid << "\n";
+          //Rcout << "Z" << Z << "\n";
+          //Rcout << "pp_weights " << pp_weights << "\n";
       if(node_vector[i].in_use & node_vector[i].is_terminal)
       {
          
         NumericVector node_pp_weights = pp_weights[node_vector[i].observations];
-                  Rcout << "node_pp_weights " << node_pp_weights << "\n";
+                  //Rcout << "node_pp_weights " << node_pp_weights << "\n";
         double nj = sum(node_pp_weights);
-                  Rcout << "nj " << nj << "\n";
+                  //Rcout << "nj " << nj << "\n";
         NumericVector node_resid = y_resid[node_vector[i].observations];
-                  Rcout << "node_resid " << node_resid << "\n";
+                  //Rcout << "node_resid " << node_resid << "\n";
         NumericVector zy = Z*y_resid;
-                  Rcout << "zy " << zy << "\n";
+                  //Rcout << "zy " << zy << "\n";
         NumericVector node_zy_resid= zy[node_vector[i].observations];
-                  Rcout << "node_zy_resid " << node_zy_resid << "\n";
+                  //Rcout << "node_zy_resid " << node_zy_resid << "\n";
         NumericVector node_z = Z[node_vector[i].observations];
-                  Rcout << "node_z " << node_z << "\n";
+                  //Rcout << "node_z " << node_z << "\n";
         double nz = sum(node_pp_weights*node_z);
-                  Rcout << "nz " << nz << "\n";
+                  //Rcout << "nz " << nz << "\n";
         double sum_Rji2 = sum(node_pp_weights*(node_resid*node_resid));
-                  Rcout << "sum_Rji2 " << sum_Rji2 << "\n";
+                  //Rcout << "sum_Rji2 " << sum_Rji2 << "\n";
         
         double eq1 = (nj/2.0)*log(tau) + (1.0/2.0)*log(tau_tau/(tau_tau + nz*tau)) - (tau/2.0)*(sum_Rji2 - (tau*(sum(node_pp_weights*node_zy_resid))*(sum(node_pp_weights*node_zy_resid)))/(tau_tau + nz*tau));
-         Rcout << "eq1 " << eq1 << "\n";
+         //Rcout << "eq1 " << eq1 << "\n";
         double eq4p1 = log(1.0-alpha_tau*pow(1+floor(log2(i + 1)), (-1*beta_tau)));
-         Rcout << "eq4p1 " << eq4p1 << "\n";
+         //Rcout << "eq4p1 " << eq4p1 << "\n";
         log_lik += eq1 + eq4p1;
-         Rcout << "log_lik " << log_lik << "\n";
+         //Rcout << "log_lik " << log_lik << "\n";
       }
       else if(node_vector[i].in_use & !node_vector[i].is_terminal)
       {
         double eq4p2 = log(alpha_tau)-beta_tau*log(1+floor(log2(i + 1)));
-         Rcout << "eq4p2 " << eq4p2 << "\n";
+         //Rcout << "eq4p2 " << eq4p2 << "\n";
         log_lik += eq4p2;
-         Rcout << "log_lik " << log_lik << "\n";
+         //Rcout << "log_lik " << log_lik << "\n";
       }
     }
-     Rcout << "log_lik final " << log_lik << "\n";
+     //Rcout << "log_lik final " << log_lik << "\n";
     return log_lik;
     
   }
@@ -677,13 +677,13 @@ List fast_rct_bcf(NumericMatrix X,
   //get number of variables p, and rows n
   //n observations
   int n = y_scaled.size();
-  // Rcout << "n " << n;
+  // //Rcout << "n " << n;
   //columns in the control matrix of covariates
   int p = X.ncol();
-  // Rcout << "columns in the control matrix of covariates " << p ;
+  // //Rcout << "columns in the control matrix of covariates " << p ;
   //columns in the moderating matrix of covariates
   int p_tau = X_tau.ncol();
-  // Rcout << "columns in the moderating matrix of covariates " << p_tau ;
+  // //Rcout << "columns in the moderating matrix of covariates " << p_tau ;
   
   //For holding tree predictions at each iteration
   //Entry i,j holds prediction from tree j for observation i
@@ -717,20 +717,20 @@ List fast_rct_bcf(NumericMatrix X,
     for(int tree_num = 0; tree_num < n_tree_mu; tree_num++)
     {
         Rcout << "Loop for updating mu trees (mu trees that apply to everybody)     " << "\n";
-        Rcout << "tree_preds_mu " << tree_preds_mu << "\n";
-        Rcout << "tree_preds_mu_rct " << tree_preds_mu_rct << "\n";
-        Rcout << "tree_preds_tau " << tree_preds_tau << "\n";
-        Rcout << "tree_preds_tau_rct " << tree_preds_tau_rct << "\n";
-        //Rcout << "Z_treat " << Z_treat;
-        //Rcout << "Z_rct " << Z_rct;
-        //Rcout << "rowSumsWithoutColumn(tree_preds_mu, tree_num)" << rowSumsWithoutColumn(tree_preds_mu, tree_num) << "\n";
-        //Rcout << "rowSumsWithoutColumn(tree_preds_mu_rct, -1)" << rowSumsWithoutColumn(tree_preds_mu_rct, -1) << "\n";
-        //Rcout << "rowSumsWithoutColumn(tree_preds_tau, -1)" << rowSumsWithoutColumn(tree_preds_tau, -1) << "\n";
-        //Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rowSumsWithoutColumn(tree_preds_tau_rct, -1) << "\n";
+        //Rcout << "tree_preds_mu " << tree_preds_mu << "\n";
+        //Rcout << "tree_preds_mu_rct " << tree_preds_mu_rct << "\n";
+        //Rcout << "tree_preds_tau " << tree_preds_tau << "\n";
+        //Rcout << "tree_preds_tau_rct " << tree_preds_tau_rct << "\n";
+        ////Rcout << "Z_treat " << Z_treat;
+        ////Rcout << "Z_rct " << Z_rct;
+        ////Rcout << "rowSumsWithoutColumn(tree_preds_mu, tree_num)" << rowSumsWithoutColumn(tree_preds_mu, tree_num) << "\n";
+        ////Rcout << "rowSumsWithoutColumn(tree_preds_mu_rct, -1)" << rowSumsWithoutColumn(tree_preds_mu_rct, -1) << "\n";
+        ////Rcout << "rowSumsWithoutColumn(tree_preds_tau, -1)" << rowSumsWithoutColumn(tree_preds_tau, -1) << "\n";
+        ////Rcout << "rowSumsWithoutColumn(tree_preds_tau_rct, -1)" << rowSumsWithoutColumn(tree_preds_tau_rct, -1) << "\n";
       NumericVector y_resid = y_scaled-rowSumsWithoutColumn(tree_preds_mu, tree_num)-Z_rct*rowSumsWithoutColumn(tree_preds_mu_rct, -1)
       -Z_treat*rowSumsWithoutColumn(tree_preds_tau, -1)-Z_treat*Z_rct*rowSumsWithoutColumn(tree_preds_tau_rct, -1);
 
-        Rcout << "y_resid " << y_resid << "\n";
+        //Rcout << "y_resid " << y_resid << "\n";
        
       String choice = sample(choices, 1)[0];
       
@@ -779,6 +779,10 @@ List fast_rct_bcf(NumericMatrix X,
                                                                    mu_pp_weights);
         
         double a = exp(lnew-lold);
+      
+         Rcout << "lnew" << lnew << "\n"; 
+         Rcout << "lord" << lnew << "\n"; 
+
         if(a > R::runif(0, 1))
         {
           bart_forest_mu.tree_vector[tree_num] = Tree(proposal_tree);
@@ -1021,8 +1025,8 @@ List fast_rct_bcf(NumericMatrix X,
      }
     }
     
-    //Rcpp::Rcout << "Total off " << iter+1 << " of " << n_iter << " iterations completed! " << "(" << (float)(iter+1)/(float)n_iter*100 << "%)                         " << "\n";
-    //Rcpp::Rcout.flush();
+    //Rcpp:://Rcout << "Total off " << iter+1 << " of " << n_iter << " iterations completed! " << "(" << (float)(iter+1)/(float)n_iter*100 << "%)                         " << "\n";
+    //Rcpp:://Rcout.flush();
     
     //Get the overall predictions from the iteration by adding contributions from all trees
     NumericVector iter_preds_mu = rowSumsWithoutColumn(tree_preds_mu, -1);
@@ -1044,7 +1048,7 @@ List fast_rct_bcf(NumericMatrix X,
     taus[iter] = tau;
   }
   
-  Rcpp::Rcout << "                                                                                                                                     ";
+  Rcpp:://Rcout << "                                                                                                                                     ";
   
   //Return all results
   return List::create(
